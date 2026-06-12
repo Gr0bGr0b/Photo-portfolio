@@ -77,90 +77,7 @@ export const photos: Photo[] = [
     description: 'Centuries of patient cultivation.', location: 'Niigata, Japan', year: 2022,
     aperture: 'ƒ/8', shutterSpeed: '1/60', iso: 100, focalLength: '80mm', camera: 'Hasselblad 500C/M'
   },
-    {
-    id: 's1', title: 'Shinjuku Rain', collection: 'street',
-    src: 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=900&q=80',
-    width: 900, height: 1200, featured: true, price: 45,
-    description: 'Late night neon reflections on wet asphalt.', location: 'Tokyo, Japan', year: 2023,
-    aperture: 'ƒ/2.8', shutterSpeed: '1/60', iso: 1600, focalLength: '28mm', camera: 'Leica M6'
-  },
-  {
-    id: 's2', title: 'Morning Commute', collection: 'street',
-    src: 'https://images.unsplash.com/photo-1513407030348-c983a97b98d8?w=900&q=80',
-    width: 900, height: 600, featured: true, price: 38,
-    description: 'Salarymen crossing in the early fog.', location: 'Tokyo, Japan', year: 2023,
-    aperture: 'ƒ/4', shutterSpeed: '1/250', iso: 400, focalLength: '35mm', camera: 'Leica M6'
-  },
-  {
-    id: 's3', title: 'Harajuku Walk', collection: 'street',
-    src: 'https://images.unsplash.com/photo-1536098561742-ca998e48cbcc?w=900&q=80',
-    width: 900, height: 1350, price: 42,
-    description: 'Youth culture blooming between narrow lanes.', location: 'Tokyo, Japan', year: 2022,
-    aperture: 'ƒ/2.8', shutterSpeed: '1/500', iso: 200, focalLength: '50mm', camera: 'Leica M6'
-  },
-  {
-    id: 's4', title: 'Alley Vendors', collection: 'street',
-    src: 'https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=900&q=80',
-    width: 900, height: 600, price: 35,
-    description: 'Izakaya lanterns guiding the hungry home.', location: 'Osaka, Japan', year: 2022,
-    aperture: 'ƒ/2', shutterSpeed: '1/125', iso: 800, focalLength: '35mm', camera: 'Leica M6'
-  },
-  {
-    id: 's1', title: 'Shinjuku Rain', collection: 'street',
-    src: 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=900&q=80',
-    width: 900, height: 1200, featured: true, price: 45,
-    description: 'Late night neon reflections on wet asphalt.', location: 'Tokyo, Japan', year: 2023,
-    aperture: 'ƒ/2.8', shutterSpeed: '1/60', iso: 1600, focalLength: '28mm', camera: 'Leica M6'
-  },
-  {
-    id: 's2', title: 'Morning Commute', collection: 'street',
-    src: 'https://images.unsplash.com/photo-1513407030348-c983a97b98d8?w=900&q=80',
-    width: 900, height: 600, featured: true, price: 38,
-    description: 'Salarymen crossing in the early fog.', location: 'Tokyo, Japan', year: 2023,
-    aperture: 'ƒ/4', shutterSpeed: '1/250', iso: 400, focalLength: '35mm', camera: 'Leica M6'
-  },
-  {
-    id: 's3', title: 'Harajuku Walk', collection: 'street',
-    src: 'https://images.unsplash.com/photo-1536098561742-ca998e48cbcc?w=900&q=80',
-    width: 900, height: 1350, price: 42,
-    description: 'Youth culture blooming between narrow lanes.', location: 'Tokyo, Japan', year: 2022,
-    aperture: 'ƒ/2.8', shutterSpeed: '1/500', iso: 200, focalLength: '50mm', camera: 'Leica M6'
-  },
-  {
-    id: 's4', title: 'Alley Vendors', collection: 'street',
-    src: 'https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=900&q=80',
-    width: 900, height: 600, price: 35,
-    description: 'Izakaya lanterns guiding the hungry home.', location: 'Osaka, Japan', year: 2022,
-    aperture: 'ƒ/2', shutterSpeed: '1/125', iso: 800, focalLength: '35mm', camera: 'Leica M6'
-  },
-  {
-    id: 's1', title: 'Shinjuku Rain', collection: 'street',
-    src: 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=900&q=80',
-    width: 900, height: 1200, featured: true, price: 45,
-    description: 'Late night neon reflections on wet asphalt.', location: 'Tokyo, Japan', year: 2023,
-    aperture: 'ƒ/2.8', shutterSpeed: '1/60', iso: 1600, focalLength: '28mm', camera: 'Leica M6'
-  },
-  {
-    id: 's2', title: 'Morning Commute', collection: 'street',
-    src: 'https://images.unsplash.com/photo-1513407030348-c983a97b98d8?w=900&q=80',
-    width: 900, height: 600, featured: true, price: 38,
-    description: 'Salarymen crossing in the early fog.', location: 'Tokyo, Japan', year: 2023,
-    aperture: 'ƒ/4', shutterSpeed: '1/250', iso: 400, focalLength: '35mm', camera: 'Leica M6'
-  },
-  {
-    id: 's3', title: 'Harajuku Walk', collection: 'street',
-    src: 'https://images.unsplash.com/photo-1536098561742-ca998e48cbcc?w=900&q=80',
-    width: 900, height: 1350, price: 42,
-    description: 'Youth culture blooming between narrow lanes.', location: 'Tokyo, Japan', year: 2022,
-    aperture: 'ƒ/2.8', shutterSpeed: '1/500', iso: 200, focalLength: '50mm', camera: 'Leica M6'
-  },
-  {
-    id: 's4', title: 'Alley Vendors', collection: 'street',
-    src: 'https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=900&q=80',
-    width: 900, height: 600, price: 35,
-    description: 'Izakaya lanterns guiding the hungry home.', location: 'Osaka, Japan', year: 2022,
-    aperture: 'ƒ/2', shutterSpeed: '1/125', iso: 800, focalLength: '35mm', camera: 'Leica M6'
-  },
+  
 
   // Life
   {
@@ -218,8 +135,8 @@ export const photos: Photo[] = [
 export const featuredPhotos = photos.filter(p => p.featured);
 
 export const collections = [
-  { id: 'street', label: 'Street', jp: '街' },
-  { id: 'landscape', label: 'Landscape', jp: '風景' },
-  { id: 'life', label: 'Life', jp: '生活' },
-  { id: 'others', label: 'Others', jp: '他' },
+  { id: 'street', label: 'Street' },
+  { id: 'landscape', label: 'Landscape' },
+  { id: 'life', label: 'Life' },
+  { id: 'others', label: 'Others' },
 ] as const;

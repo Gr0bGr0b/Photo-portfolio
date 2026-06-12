@@ -17,7 +17,7 @@ const {
 ---
 
 <!DOCTYPE html>
-<html lang="en" data-theme="caramellatte">
+<html lang="en" data-theme="caramellatte" id="theme-root">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -32,6 +32,59 @@ const {
   </main>
   <Footer />
   <script>
+    (function() {
+      const root = document.getElementById('theme-root');
+      const toggle = document.getElementById('theme-toggle');
+      const sun = document.getElementById('sun-icon');
+      const moon = document.getElementById('moon-icon');
+
+      function setTheme(theme) {
+        root.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+        if (sun && moon) {
+          sun.classList.toggle('hidden', theme === 'caramellatte');
+          moon.classList.toggle('hidden', theme !== 'caramellatte');
+        }
+      }
+
+      const saved = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (saved) {
+        setTheme(saved);
+      } else if (prefersDark) {
+        setTheme('caramellatte-dark');
+      }
+
+      if (toggle) {
+        toggle.addEventListener('click', () => {
+          const current = root.getAttribute('data-theme');
+          const next = current === 'caramellatte' ? 'caramellatte-dark' : 'caramellatte';
+
+          const tmp = document.createElement('div');
+          tmp.style.cssText = 'position:fixed;visibility:hidden;background:var(--color-base-100);';
+          document.body.appendChild(tmp);
+          const bg = getComputedStyle(tmp).backgroundColor;
+          document.body.removeChild(tmp);
+
+          const wipe = document.createElement('div');
+          wipe.style.cssText = `position:fixed;inset:0;z-index:9999;pointer-events:none;background:${bg};`;
+          document.body.appendChild(wipe);
+
+          root.setAttribute('data-theme', next);
+          localStorage.setItem('theme', next);
+          if (sun && moon) {
+            sun.classList.toggle('hidden', next === 'caramellatte');
+            moon.classList.toggle('hidden', next !== 'caramellatte');
+          }
+
+          wipe.offsetHeight;
+          wipe.classList.add('theme-wiping');
+
+          wipe.addEventListener('animationend', () => wipe.remove(), { once: true });
+        });
+      }
+    })();
+
     const imgObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {

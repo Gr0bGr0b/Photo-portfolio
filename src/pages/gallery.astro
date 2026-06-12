@@ -3,7 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { photos, collections } from '../data/photos';
 ---
 
-<BaseLayout title="Gallery — YUKI MORI" activePage="gallery">
+<BaseLayout title="Gallery — Rob" activePage="gallery">
 
   <section class="pt-28 pb-8 px-6">
     <div class="max-w-7xl mx-auto">
@@ -43,7 +43,6 @@ import { photos, collections } from '../data/photos';
                   <h2 class="font-display text-lg font-bold text-[var(--color-base-content)] tracking-tight group-hover:text-[var(--color-primary)] transition-colors">
                     {col.label}
                   </h2>
-                  <p class="font-jp text-sm text-[var(--color-primary)] mt-0.5">{col.jp}</p>
                 </div>
                 <span class="text-xs text-[var(--color-base-content)]/40 font-display tracking-wider shrink-0">
                   {colPhotos.length} photos
@@ -69,8 +68,10 @@ import { photos, collections } from '../data/photos';
         <button id="overlay-close" class="absolute top-4 right-4 z-10 font-display text-xs tracking-wider text-white/60 hover:text-white transition-colors cursor-pointer">
           Close &times;
         </button>
-        <div id="overlay-image-wrap" class="flex-1 flex items-center justify-center p-4 md:p-8 min-h-0">
+        <div id="overlay-image-wrap" class="flex-1 flex items-center justify-center p-12 md:p-16 min-h-0 relative">
+          <button id="overlay-prev" class="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-10 text-white/40 hover:text-white transition-colors cursor-pointer text-3xl md:text-4xl leading-none px-2 select-none hidden">&lsaquo;</button>
           <img id="overlay-image" src="" alt="" class="max-w-full max-h-full object-contain" />
+          <button id="overlay-next" class="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-10 text-white/40 hover:text-white transition-colors cursor-pointer text-3xl md:text-4xl leading-none px-2 select-none hidden">&rsaquo;</button>
         </div>
         <div id="overlay-info" class="md:w-80 shrink-0 bg-[var(--color-base-100)] border-l border-[var(--color-base-300)] p-6 md:p-8 overflow-y-auto">
         </div>
@@ -96,6 +97,9 @@ import { photos, collections } from '../data/photos';
   const overlayImg = document.getElementById('overlay-image');
   const overlayInfo = document.getElementById('overlay-info');
   const overlayClose = document.getElementById('overlay-close');
+  const overlayPrev = document.getElementById('overlay-prev');
+  const overlayNext = document.getElementById('overlay-next');
+  let currentIndex = -1;
 
   const collectionMap = {};
   for (const col of collections) {
@@ -144,7 +148,7 @@ import { photos, collections } from '../data/photos';
     detailGrid.querySelectorAll('[data-photo-index]').forEach(el => {
       el.addEventListener('click', (e) => {
         const idx = parseInt(e.currentTarget.dataset.photoIndex);
-        if (currentPhotos[idx]) showPhoto(currentPhotos[idx]);
+        if (currentPhotos[idx]) showPhoto(currentPhotos[idx], idx);
       });
     });
   }
@@ -198,12 +202,7 @@ import { photos, collections } from '../data/photos';
     history.replaceState(null, '', `/gallery#${id}`);
   }
 
-  function showPhoto(p) {
-    overlayImg.src = p.src;
-    overlayImg.alt = p.title;
-    overlay.classList.remove('hidden');
-    document.body.style.overflow = 'hidden';
-
+  function renderOverlay(p) {
     const exif = formatExif(p);
     overlayInfo.innerHTML = `
       <p class="font-display text-2xl font-bold text-[var(--color-base-content)] tracking-tight mb-1">${p.title}</p>
@@ -221,10 +220,30 @@ import { photos, collections } from '../data/photos';
     `;
   }
 
+  function showPhoto(p, idx) {
+    currentIndex = idx;
+    overlayImg.src = p.src;
+    overlayImg.alt = p.title;
+    overlay.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+    renderOverlay(p);
+    overlayPrev.classList.toggle('hidden', idx <= 0);
+    overlayNext.classList.toggle('hidden', idx >= currentPhotos.length - 1);
+  }
+
+  function showPrev() {
+    if (currentIndex > 0) showPhoto(currentPhotos[currentIndex - 1], currentIndex - 1);
+  }
+
+  function showNext() {
+    if (currentIndex < currentPhotos.length - 1) showPhoto(currentPhotos[currentIndex + 1], currentIndex + 1);
+  }
+
   function hideOverlay() {
     overlay.classList.add('hidden');
     document.body.style.overflow = '';
     overlayImg.src = '';
+    currentIndex = -1;
   }
 
   cards.forEach(card => {
@@ -233,11 +252,15 @@ import { photos, collections } from '../data/photos';
 
   backBtn.addEventListener('click', showGrid);
   overlayClose.addEventListener('click', hideOverlay);
+  overlayPrev.addEventListener('click', showPrev);
+  overlayNext.addEventListener('click', showNext);
   overlay.addEventListener('click', (e) => {
     if (e.target === overlay) hideOverlay();
   });
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') hideOverlay();
+    if (e.key === 'ArrowLeft' && currentIndex >= 0) showPrev();
+    if (e.key === 'ArrowRight' && currentIndex >= 0) showNext();
   });
 
   const hash = location.hash.replace('#', '');

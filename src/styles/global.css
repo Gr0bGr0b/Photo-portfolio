@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap");
 @import "tailwindcss";
 
 @plugin "daisyui/theme" {
@@ -36,23 +36,54 @@
   --noise: 1;
 }
 
+@plugin "daisyui/theme" {
+  name: "caramellatte-dark";
+  default: false;
+  prefersdark: false;
+  color-scheme: "dark";
+  --color-base-100: oklch(20% 0.02 73.684);
+  --color-base-200: oklch(25% 0.025 73.684);
+  --color-base-300: oklch(32% 0.03 73.684);
+  --color-base-content: oklch(90% 0.01 73.684);
+  --color-primary: oklch(100% 0 0);
+  --color-primary-content: oklch(0% 0 0);
+  --color-secondary: oklch(70% 0.05 37.85);
+  --color-secondary-content: oklch(20% 0.02 73.684);
+  --color-accent: oklch(70% 0.05 37.85);
+  --color-accent-content: oklch(20% 0.02 73.684);
+  --color-neutral: oklch(45% 0.05 38.402);
+  --color-neutral-content: oklch(90% 0.01 73.684);
+  --color-info: oklch(60% 0.1 265.638);
+  --color-info-content: oklch(20% 0.02 73.684);
+  --color-success: oklch(60% 0.1 166.913);
+  --color-success-content: oklch(20% 0.02 73.684);
+  --color-warning: oklch(70% 0.15 84.429);
+  --color-warning-content: oklch(20% 0.02 73.684);
+  --color-error: oklch(60% 0.15 22.216);
+  --color-error-content: oklch(20% 0.02 73.684);
+  --radius-selector: 0.5rem;
+  --radius-field: 0.5rem;
+  --radius-box: 0.25rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 2px;
+  --depth: 1;
+  --noise: 1;
+}
+
 html {
   scroll-behavior: smooth;
 }
 
 body {
-  font-family: "Inter", "Noto Sans JP", sans-serif;
+  font-family: "Inter", sans-serif;
   font-weight: 300;
   -webkit-font-smoothing: antialiased;
 }
 
 .font-display {
-  font-family: "Space Grotesk", "Noto Sans JP", sans-serif;
+  font-family: "Space Grotesk", sans-serif;
   font-weight: 600;
-}
-
-.font-jp {
-  font-family: "Noto Sans JP", sans-serif;
 }
 
 .photo-loading {
@@ -77,4 +108,17 @@ body {
 .photo-reveal.revealed {
   opacity: 1;
   transform: translateY(0) scale(1);
+}
+
+@keyframes theme-wipe {
+  from {
+    clip-path: circle(150% at 100% 0%);
+  }
+  to {
+    clip-path: circle(0% at 100% 0%);
+  }
+}
+
+.theme-wiping {
+  animation: theme-wipe 0.7s cubic-bezier(0.25, 0, 0.15, 1) forwards;
 }

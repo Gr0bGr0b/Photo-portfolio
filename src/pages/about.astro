@@ -9,7 +9,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <h1 class="font-display text-3xl sm:text-4xl font-bold text-[var(--color-base-content)] tracking-tight">
         About
       </h1>
-      <p class="font-jp text-sm tracking-wider text-[var(--color-primary)] mt-2">森　雪</p>
     </div>
   </section>
 
@@ -32,34 +31,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             Born in Nagano, I moved to Tokyo at nineteen with nothing but a Canon AE-1 and a notebook full of places to visit. The city overwhelmed me, then seduced me, and finally became the lens through which I learned to see everywhere else.
           </p>
           <p>
-            Over a decade later, I divide my time between Tokyo and Kyoto, documenting what I call the <span class="font-jp text-[var(--color-primary)]">ma</span> — the Japanese concept of the space between things.
+            Over a decade later, I divide my time between Tokyo and Kyoto, documenting what I call the <span class="text-[var(--color-primary)]">ma</span> — the Japanese concept of the space between things.
           </p>
           <p>
             I shoot primarily on medium format film, scanning and printing with archival processes that honour the slowness of the subject.
           </p>
         </div>
 
-        <div class="mt-8 flex flex-wrap gap-3">
-          <a href="/gallery" class="btn-primary">View Gallery</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="mb-24">
-      <h2 class="font-display text-2xl font-bold text-[var(--color-base-content)] tracking-tight mb-8">Philosophy</h2>
-      <div class="grid md:grid-cols-2 gap-4">
-        {[
-          { title: 'Ma — The Space Between', body: 'Great photography does not fill the frame; it uses emptiness as an element. The unoccupied corner of a tatami room says more about presence than any face could.' },
-          { title: 'Wabi — Imperfect Beauty', body: 'I am drawn to the crack in the lacquer, the fog that obscures the mountain, the grain on a slow exposure.' },
-          { title: 'Sabi — The Beauty of Age', body: 'Time leaves marks that no designer can replicate. A faded noren, a moss-covered stone — these are the subjects I return to.' },
-          { title: 'Stillness as Practice', body: 'I wait. Sometimes an hour, sometimes a day. The photograph arrives if you are patient enough to receive it.' },
-        ].map(item => (
-          <div class="border border-[var(--color-base-300)] p-5 hover:border-[var(--color-primary)] transition-colors">
-            <h3 class="font-display text-sm font-semibold text-[var(--color-base-content)] tracking-tight mb-2">{item.title}</h3>
-            <p class="text-xs text-[color-mix(in oklch, var(--color-base-content), var(--color-base-100) 60%)] leading-relaxed">{item.body}</p>
-          </div>
-        ))}
-      </div>
+              </div>
     </div>
 
     <div>
