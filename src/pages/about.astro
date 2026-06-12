@@ -1,0 +1,82 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="About — Rob "activePage="about">
+
+  <section class="pt-28 pb-8 px-6">
+    <div class="max-w-7xl mx-auto">
+      <h1 class="font-display text-3xl sm:text-4xl font-bold text-[var(--color-base-content)] tracking-tight">
+        About
+      </h1>
+      <p class="font-jp text-sm tracking-wider text-[var(--color-primary)] mt-2">森　雪</p>
+    </div>
+  </section>
+
+  <div class="max-w-7xl mx-auto px-6 pb-16">
+
+    <div class="grid md:grid-cols-5 gap-12 mb-24">
+      <div class="md:col-span-2">
+        <div class="relative overflow-hidden">
+          <img
+            src="https://images.unsplash.com/photo-1553361371-9b22f78e8b1d?w=600&q=80"
+            alt="Rob"
+            class="w-full aspect-[3/4] object-cover"
+          />
+        </div>
+      </div>
+
+      <div class="md:col-span-3">
+        <div class="space-y-4 text-sm text-[color-mix(in oklch, var(--color-base-content), var(--color-base-100) 60%)] leading-relaxed">
+          <p>
+            Born in Nagano, I moved to Tokyo at nineteen with nothing but a Canon AE-1 and a notebook full of places to visit. The city overwhelmed me, then seduced me, and finally became the lens through which I learned to see everywhere else.
+          </p>
+          <p>
+            Over a decade later, I divide my time between Tokyo and Kyoto, documenting what I call the <span class="font-jp text-[var(--color-primary)]">ma</span> — the Japanese concept of the space between things.
+          </p>
+          <p>
+            I shoot primarily on medium format film, scanning and printing with archival processes that honour the slowness of the subject.
+          </p>
+        </div>
+
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href="/gallery" class="btn-primary">View Gallery</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-24">
+      <h2 class="font-display text-2xl font-bold text-[var(--color-base-content)] tracking-tight mb-8">Philosophy</h2>
+      <div class="grid md:grid-cols-2 gap-4">
+        {[
+          { title: 'Ma — The Space Between', body: 'Great photography does not fill the frame; it uses emptiness as an element. The unoccupied corner of a tatami room says more about presence than any face could.' },
+          { title: 'Wabi — Imperfect Beauty', body: 'I am drawn to the crack in the lacquer, the fog that obscures the mountain, the grain on a slow exposure.' },
+          { title: 'Sabi — The Beauty of Age', body: 'Time leaves marks that no designer can replicate. A faded noren, a moss-covered stone — these are the subjects I return to.' },
+          { title: 'Stillness as Practice', body: 'I wait. Sometimes an hour, sometimes a day. The photograph arrives if you are patient enough to receive it.' },
+        ].map(item => (
+          <div class="border border-[var(--color-base-300)] p-5 hover:border-[var(--color-primary)] transition-colors">
+            <h3 class="font-display text-sm font-semibold text-[var(--color-base-content)] tracking-tight mb-2">{item.title}</h3>
+            <p class="text-xs text-[color-mix(in oklch, var(--color-base-content), var(--color-base-100) 60%)] leading-relaxed">{item.body}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <div>
+      <h2 class="font-display text-2xl font-bold text-[var(--color-base-content)] tracking-tight mb-8">Contact</h2>
+      <div class="grid md:grid-cols-2 gap-8 items-start max-w-4xl">
+        <div class="space-y-2 text-sm text-[color-mix(in oklch, var(--color-base-content), var(--color-base-100) 60%)] leading-relaxed">
+          <div class="font-display text-[var(--color-base-content)] font-semibold tracking-tight">hello@rob.photo</div>
+          <p class="text-xs text-[color-mix(in oklch, var(--color-base-content), var(--color-base-100) 60%)]">Response within 48 hours.</p>
+        </div>
+        <div class="space-y-3">
+          <input type="text" placeholder="Your name" class="w-full bg-[var(--color-base-200)] border border-[var(--color-base-300)] px-4 py-3 text-sm font-display tracking-wide text-[var(--color-base-content)] placeholder:text-[color-mix(in oklch, var(--color-base-content), var(--color-base-100) 60%)] outline-none focus:border-[var(--color-primary)] transition-colors" />
+          <input type="email" placeholder="Email address" class="w-full bg-[var(--color-base-200)] border border-[var(--color-base-300)] px-4 py-3 text-sm font-display tracking-wide text-[var(--color-base-content)] placeholder:text-[color-mix(in oklch, var(--color-base-content), var(--color-base-100) 60%)] outline-none focus:border-[var(--color-primary)] transition-colors" />
+          <textarea rows="4" placeholder="Your message" class="w-full bg-[var(--color-base-200)] border border-[var(--color-base-300)] px-4 py-3 text-sm font-display tracking-wide text-[var(--color-base-content)] placeholder:text-[color-mix(in oklch, var(--color-base-content), var(--color-base-100) 60%)] outline-none focus:border-[var(--color-primary)] transition-colors resize-none"></textarea>
+          <button class="btn-primary w-full">Send Message</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</BaseLayout>

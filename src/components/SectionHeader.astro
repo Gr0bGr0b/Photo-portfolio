@@ -1,0 +1,28 @@
+---
+interface Props {
+  title: string;
+  subtitle?: string;
+  label?: string;
+}
+
+const { title, subtitle, label } = Astro.props;
+---
+
+<div class="mb-12">
+  {label && (
+    <div class="font-display text-[0.65rem] tracking-[0.2em] uppercase text-[var(--color-base-content)]/60 flex items-center gap-4 mb-3">
+      {label}
+    </div>
+  )}
+  <div class="flex items-start justify-between gap-4">
+    <div>
+      <h2 class="font-display text-3xl md:text-5xl font-bold tracking-tight text-[var(--color-base-content)]">
+        {title}
+      </h2>
+      {subtitle && (
+        <p class="text-sm mt-3 text-[var(--color-base-content)]/60 max-w-lg leading-relaxed">{subtitle}</p>
+      )}
+    </div>
+  </div>
+  <div class="w-full h-px mt-6 bg-gradient-to-r from-transparent via-[var(--color-primary)] to-transparent"></div>
+</div>

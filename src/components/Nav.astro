@@ -1,0 +1,79 @@
+---
+interface Props {
+  activePage?: string;
+}
+const { activePage = '' } = Astro.props;
+
+const links = [
+  { href: '/', label: 'Portfolio', id: 'home' },
+  { href: '/gallery', label: 'Gallery', id: 'gallery' },
+  { href: '/about', label: 'Info', id: 'about' },
+];
+---
+
+<header class="fixed top-0 left-0 right-0 z-50 transition-all" id="site-nav">
+  <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+    <a href="/" class="font-display text-sm font-bold tracking-wider text-[var(--color-base-content)] hover:text-[var(--color-primary)] transition-colors" aria-label="Home">
+      YUKI MORI
+    </a>
+
+    <nav class="hidden md:flex items-center gap-2">
+      {links.map(link => (
+        <a
+          href={link.href}
+          class={`font-display text-xs tracking-[0.15em] uppercase transition-colors px-3 py-1.5 ${
+            activePage === link.id
+              ? 'text-[var(--color-primary)]'
+              : 'text-[var(--color-base-content)]/60 hover:text-[var(--color-base-content)]'
+          }`}
+        >
+          {link.label}
+        </a>
+      ))}
+    </nav>
+
+    <button class="md:hidden flex flex-col gap-1.5 p-2" id="menu-toggle" aria-label="Toggle menu">
+      <span class="block w-5 h-px bg-[var(--color-base-content)] transition-all" id="ham-1"></span>
+      <span class="block w-5 h-px bg-[var(--color-primary)] transition-all" id="ham-2"></span>
+      <span class="block w-5 h-px bg-[var(--color-base-content)] transition-all" id="ham-3"></span>
+    </button>
+  </div>
+
+  <div class="md:hidden hidden bg-[var(--color-base-100)] border-t border-[var(--color-base-300)]" id="mobile-menu">
+    <nav class="flex flex-col px-6 py-4 gap-1">
+      {links.map(link => (
+        <a
+          href={link.href}
+          class={`py-3 font-display text-sm tracking-wider ${
+            activePage === link.id
+              ? 'text-[var(--color-primary)]'
+              : 'text-[var(--color-base-content)]/60'
+          }`}
+        >
+          {link.label}
+        </a>
+      ))}
+    </nav>
+  </div>
+</header>
+
+<style>
+  #site-nav.scrolled {
+    background: color-mix(in oklch, var(--color-base-100), transparent 10%);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--color-base-300);
+  }
+</style>
+
+<script>
+  const nav = document.getElementById('site-nav');
+  window.addEventListener('scroll', () => {
+    nav?.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  const btn = document.getElementById('menu-toggle');
+  const menu = document.getElementById('mobile-menu');
+  btn?.addEventListener('click', () => {
+    menu?.classList.toggle('hidden');
+  });
+</script>

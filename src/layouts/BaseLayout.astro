@@ -1,0 +1,85 @@
+---
+import '../styles/global.css';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  activePage?: string;
+}
+
+const { 
+  title = 'YUKI MORI — Photography', 
+  description = 'Fine art photography from Japan. Street, landscape, and life.',
+  activePage = '' 
+} = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en" data-theme="caramellatte">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content={description} />
+  <title>{title}</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+</head>
+<body class="min-h-screen flex flex-col">
+  <Nav activePage={activePage} />
+  <main class="flex-1">
+    <slot />
+  </main>
+  <Footer />
+  <script>
+    const imgObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.remove('photo-loading');
+          entry.target.classList.add('photo-loaded');
+          imgObserver.unobserve(entry.target);
+        }
+      });
+    }, { rootMargin: '100px' });
+
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('revealed');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    let revealStaggerIndex = 0;
+
+    function observeFadeElements() {
+      document.querySelectorAll('[data-scroll-fade]').forEach(el => {
+        if (!el.classList.contains('photo-loaded')) {
+          imgObserver.observe(el);
+        }
+      });
+    }
+
+    function observeRevealElements(parent) {
+      const items = (parent || document).querySelectorAll('.photo-reveal');
+      items.forEach((el, i) => {
+        if (!el.classList.contains('revealed') && !el.dataset.revealIndex) {
+          el.dataset.revealIndex = revealStaggerIndex++;
+          const delay = Math.min(i, 10) * 0.08;
+          el.style.transitionDelay = `${delay}s`;
+          revealObserver.observe(el);
+        }
+      });
+    }
+
+    const domObserver = new MutationObserver(() => {
+      observeFadeElements();
+      observeRevealElements();
+    });
+    domObserver.observe(document.body, { childList: true, subtree: true });
+
+    observeFadeElements();
+    observeRevealElements();
+  </script>
+</body>

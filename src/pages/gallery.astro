@@ -1,0 +1,247 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { photos, collections } from '../data/photos';
+---
+
+<BaseLayout title="Gallery — YUKI MORI" activePage="gallery">
+
+  <section class="pt-28 pb-8 px-6">
+    <div class="max-w-7xl mx-auto">
+      <h1 class="font-display text-3xl sm:text-4xl font-bold text-[var(--color-base-content)] tracking-tight">
+        Gallery
+      </h1>
+      <p class="text-xs text-[color-mix(in oklch, var(--color-base-content), var(--color-base-100) 60%)] mt-2 tracking-wider font-display">
+        A collection of moments from Japan
+      </p>
+    </div>
+  </section>
+
+  <div class="max-w-7xl mx-auto px-6 pb-12">
+
+    <div id="collection-grid">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {collections.map(col => {
+          const colPhotos = photos.filter(p => p.collection === col.id);
+          const cover = colPhotos[0];
+          return (
+            <button
+              class="collection-card group relative overflow-hidden text-left cursor-pointer bg-[var(--color-base-200)] border border-[var(--color-base-300)] hover:border-[var(--color-primary)] transition-all"
+              data-collection={col.id}
+            >
+              {cover && (
+                <div class="aspect-[16/9] overflow-hidden">
+                  <img
+                    src={cover.src}
+                    alt={col.label}
+                    loading="lazy"
+                    class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                </div>
+              )}
+              <div class="p-5 flex items-end justify-between">
+                <div>
+                  <h2 class="font-display text-lg font-bold text-[var(--color-base-content)] tracking-tight group-hover:text-[var(--color-primary)] transition-colors">
+                    {col.label}
+                  </h2>
+                  <p class="font-jp text-sm text-[var(--color-primary)] mt-0.5">{col.jp}</p>
+                </div>
+                <span class="text-xs text-[var(--color-base-content)]/40 font-display tracking-wider shrink-0">
+                  {colPhotos.length} photos
+                </span>
+              </div>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+
+    <div id="collection-detail" class="hidden">
+      <button id="back-btn" class="flex items-center gap-2 mb-8 font-display text-xs tracking-[0.15em] uppercase text-[var(--color-base-content)]/60 hover:text-[var(--color-base-content)] transition-colors cursor-pointer">
+        <span class="inline-block text-base leading-none">&larr;</span>
+        Back to collections
+      </button>
+      <h2 id="detail-title" class="font-display text-2xl font-bold text-[var(--color-base-content)] tracking-tight mb-6"></h2>
+      <div id="detail-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1 sm:gap-2"></div>
+    </div>
+
+    <div id="photo-overlay" class="fixed inset-0 z-[100] bg-black/90 hidden">
+      <div class="h-full w-full flex flex-col md:flex-row">
+        <button id="overlay-close" class="absolute top-4 right-4 z-10 font-display text-xs tracking-wider text-white/60 hover:text-white transition-colors cursor-pointer">
+          Close &times;
+        </button>
+        <div id="overlay-image-wrap" class="flex-1 flex items-center justify-center p-4 md:p-8 min-h-0">
+          <img id="overlay-image" src="" alt="" class="max-w-full max-h-full object-contain" />
+        </div>
+        <div id="overlay-info" class="md:w-80 shrink-0 bg-[var(--color-base-100)] border-l border-[var(--color-base-300)] p-6 md:p-8 overflow-y-auto">
+        </div>
+      </div>
+    </div>
+
+  </div>
+</BaseLayout>
+
+<style>
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+</style>
+
+<script define:vars={{ photos, collections }}>
+  const cards = document.querySelectorAll('.collection-card');
+  const grid = document.getElementById('collection-grid');
+  const detail = document.getElementById('collection-detail');
+  const detailTitle = document.getElementById('detail-title');
+  const detailGrid = document.getElementById('detail-grid');
+  const backBtn = document.getElementById('back-btn');
+  const overlay = document.getElementById('photo-overlay');
+  const overlayImg = document.getElementById('overlay-image');
+  const overlayInfo = document.getElementById('overlay-info');
+  const overlayClose = document.getElementById('overlay-close');
+
+  const collectionMap = {};
+  for (const col of collections) {
+    collectionMap[col.id] = {
+      label: col.label,
+      photos: photos.filter(p => p.collection === col.id),
+    };
+  }
+
+  function formatExif(p) {
+    return [p.aperture, p.shutterSpeed, p.iso ? `ISO ${p.iso}` : '', p.focalLength].filter(Boolean).join(' · ');
+  }
+
+  function showGrid() {
+    grid.classList.remove('hidden');
+    detail.classList.add('hidden');
+    history.replaceState(null, '', '/gallery');
+  }
+
+  const CHUNK_SIZE = 8;
+  let loadObserver = null;
+  let currentPhotos = [];
+
+  function photoHtml(p, i) {
+    const aspect = p.width / p.height;
+    const span = `${aspect > 1.3 ? 'sm:col-span-2' : ''} ${aspect < 0.75 ? 'sm:row-span-2' : ''}`;
+    const exif = formatExif(p);
+    return `<div class="photo-reveal ${span}" data-photo-index="${i}">
+      <div class="relative overflow-hidden cursor-pointer bg-[var(--color-base-200)] group w-full h-full" data-photo-index="${i}">
+        <div class="w-full h-full bg-[var(--color-base-300)]">
+          <img src="${p.src}" alt="${p.title}" loading="lazy" decoding="async" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 photo-loading" data-photo-index="${i}" data-scroll-fade />
+        </div>
+        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4" data-photo-index="${i}">
+          <div class="w-full">
+            ${p.camera ? `<p class="font-display text-white/80 text-[0.65rem] tracking-wide leading-tight">${p.camera}</p>` : ''}
+            <p class="font-display text-white text-sm tracking-wide mt-0.5">${p.title}</p>
+            ${exif ? `<p class="text-white/60 text-[0.6rem] tracking-wider mt-1 font-mono">${exif}</p>` : ''}
+            ${p.price ? `<span class="inline-block mt-1.5 bg-[var(--color-primary)] text-[var(--color-primary-content)] text-[0.55rem] font-bold px-1.5 py-0.5">€${p.price}</span>` : ''}
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  function attachClickHandlers() {
+    detailGrid.querySelectorAll('[data-photo-index]').forEach(el => {
+      el.addEventListener('click', (e) => {
+        const idx = parseInt(e.currentTarget.dataset.photoIndex);
+        if (currentPhotos[idx]) showPhoto(currentPhotos[idx]);
+      });
+    });
+  }
+
+  function loadChunk(photos, start) {
+    const fragment = document.createDocumentFragment();
+    const end = Math.min(start + CHUNK_SIZE, photos.length);
+    for (let i = start; i < end; i++) {
+      const wrapper = document.createElement('div');
+      wrapper.innerHTML = photoHtml(photos[i], i);
+      fragment.appendChild(wrapper.firstElementChild);
+    }
+    detailGrid.appendChild(fragment);
+    attachClickHandlers();
+
+    if (end < photos.length) {
+      const trigger = document.createElement('div');
+      trigger.className = 'load-trigger';
+      trigger.dataset.next = end;
+      detailGrid.appendChild(trigger);
+
+      if (loadObserver) loadObserver.disconnect();
+      loadObserver = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+          loadObserver.disconnect();
+          trigger.remove();
+          loadChunk(photos, end);
+        }
+      }, { rootMargin: '200px' });
+      loadObserver.observe(trigger);
+    }
+  }
+
+  function showCollection(id) {
+    const col = collectionMap[id];
+    if (!col) return;
+
+    if (loadObserver) {
+      loadObserver.disconnect();
+      loadObserver = null;
+    }
+
+    grid.classList.add('hidden');
+    detail.classList.remove('hidden');
+    detailTitle.textContent = col.label;
+    detailGrid.innerHTML = '';
+    currentPhotos = col.photos;
+
+    loadChunk(col.photos, 0);
+
+    history.replaceState(null, '', `/gallery#${id}`);
+  }
+
+  function showPhoto(p) {
+    overlayImg.src = p.src;
+    overlayImg.alt = p.title;
+    overlay.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+
+    const exif = formatExif(p);
+    overlayInfo.innerHTML = `
+      <p class="font-display text-2xl font-bold text-[var(--color-base-content)] tracking-tight mb-1">${p.title}</p>
+      ${p.location ? `<p class="font-display text-xs tracking-wider text-[var(--color-primary)] mb-4">${p.location}</p>` : ''}
+      <div class="space-y-3 text-sm">
+        ${p.camera ? `<div class="flex justify-between py-2 border-b border-[var(--color-base-300)]"><span class="text-[var(--color-base-content)]/50 text-xs tracking-wider font-display uppercase">Camera</span><span class="text-[var(--color-base-content)] font-display text-xs">${p.camera}</span></div>` : ''}
+        ${p.aperture ? `<div class="flex justify-between py-2 border-b border-[var(--color-base-300)]"><span class="text-[var(--color-base-content)]/50 text-xs tracking-wider font-display uppercase">Aperture</span><span class="text-[var(--color-base-content)] font-mono text-xs">${p.aperture}</span></div>` : ''}
+        ${p.shutterSpeed ? `<div class="flex justify-between py-2 border-b border-[var(--color-base-300)]"><span class="text-[var(--color-base-content)]/50 text-xs tracking-wider font-display uppercase">Shutter</span><span class="text-[var(--color-base-content)] font-mono text-xs">${p.shutterSpeed}</span></div>` : ''}
+        ${p.iso ? `<div class="flex justify-between py-2 border-b border-[var(--color-base-300)]"><span class="text-[var(--color-base-content)]/50 text-xs tracking-wider font-display uppercase">ISO</span><span class="text-[var(--color-base-content)] font-mono text-xs">${p.iso}</span></div>` : ''}
+        ${p.focalLength ? `<div class="flex justify-between py-2 border-b border-[var(--color-base-300)]"><span class="text-[var(--color-base-content)]/50 text-xs tracking-wider font-display uppercase">Focal</span><span class="text-[var(--color-base-content)] font-mono text-xs">${p.focalLength}</span></div>` : ''}
+        ${p.year ? `<div class="flex justify-between py-2 border-b border-[var(--color-base-300)]"><span class="text-[var(--color-base-content)]/50 text-xs tracking-wider font-display uppercase">Year</span><span class="text-[var(--color-base-content)] font-display text-xs">${p.year}</span></div>` : ''}
+      </div>
+      ${p.description ? `<p class="text-xs text-[var(--color-base-content)]/60 leading-relaxed mt-6 font-display tracking-wide">${p.description}</p>` : ''}
+      ${p.price ? `<p class="font-display text-lg font-bold text-[var(--color-primary)] mt-6">€${p.price}</p>` : ''}
+    `;
+  }
+
+  function hideOverlay() {
+    overlay.classList.add('hidden');
+    document.body.style.overflow = '';
+    overlayImg.src = '';
+  }
+
+  cards.forEach(card => {
+    card.addEventListener('click', () => showCollection(card.dataset.collection));
+  });
+
+  backBtn.addEventListener('click', showGrid);
+  overlayClose.addEventListener('click', hideOverlay);
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) hideOverlay();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') hideOverlay();
+  });
+
+  const hash = location.hash.replace('#', '');
+  if (hash && collectionMap[hash]) {
+    showCollection(hash);
+  }
+</script>

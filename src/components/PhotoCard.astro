@@ -1,0 +1,43 @@
+---
+import type { Photo } from '../data/photos';
+
+interface Props {
+  photo: Photo;
+  showPrice?: boolean;
+  class?: string;
+}
+
+const { photo, showPrice = false, class: className = '' } = Astro.props;
+
+const hasExif = photo.aperture && photo.shutterSpeed && photo.iso;
+const exifString = hasExif
+  ? [photo.aperture, photo.shutterSpeed, `ISO ${photo.iso}`, photo.focalLength].filter(Boolean).join(' · ')
+  : '';
+---
+
+<div class={`relative overflow-hidden cursor-pointer bg-[var(--color-base-200)] group photo-reveal ${className}`}>
+  <div class="w-full h-full bg-[var(--color-base-300)]">
+    <img
+      src={photo.src}
+      alt={photo.title}
+      loading="lazy"
+      decoding="async"
+      class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 photo-loading"
+      data-scroll-fade
+    />
+  </div>
+  <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+    <div class="w-full">
+      <p class="font-display text-white/80 text-[0.65rem] tracking-wide leading-tight">
+        {photo.camera && <span>{photo.camera}</span>}
+      </p>
+      <p class="font-display text-white text-sm tracking-wide mt-0.5">{photo.title}</p>
+      {exifString && (
+        <p class="text-white/60 text-[0.6rem] tracking-wider mt-1 font-mono">{exifString}</p>
+      )}
+      {showPrice && photo.price && (
+        <span class="inline-block mt-1.5 bg-[var(--color-primary)] text-[var(--color-primary-content)] text-[0.55rem] font-bold px-1.5 py-0.5">€{photo.price}</span>
+      )}
+    </div>
+  </div>
+</div>
